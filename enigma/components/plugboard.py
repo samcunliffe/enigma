@@ -2,7 +2,6 @@ import warnings
 
 
 
-
 class Plugboard:
     """A plugboard for a military-grade Enigma machine.
 
@@ -43,3 +42,5 @@ class Plugboard:
         return {key: val for key, val in li}
     
     
+=======
+>>>>>>> 3c32e85519ab2546ce67a1a42a45c2684aff8b4a
