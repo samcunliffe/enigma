@@ -53,6 +53,3 @@ class Rotor:
 
     def reset(self):
         self.start = 0
-
-    #def setup(self, starting_position):
-        #raise NotImplementedError()

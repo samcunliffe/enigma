@@ -19,6 +19,16 @@ class TestEnigmaMachineNoPlugboard(unittest.TestCase):
         ciphertext = self.enigma.encode(input_string)
         self.assertNotIn("A", ciphertext)
 
+    def test_in_out_1(self):
+        """Check we can encode and decode one charachter"""
+        assert self.enigma.encode(self.enigma.decode("A")) == "A"
+        assert self.enigma.encode(self.enigma.decode("B")) == "B"
+
+    def test_in_out_1(self):
+        """Check we can encode and decode a word"""
+        assert self.enigma.encode(self.enigma.decode("TURING")) == "TURING"
+        assert self.enigma.encode(self.enigma.decode("TURING")) == "TURING"
+
     def test_encoding(self):
         """Test encoding a sample input"""
         input_string = "WETTERBERICHT"

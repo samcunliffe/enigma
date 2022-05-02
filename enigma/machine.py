@@ -8,7 +8,7 @@ class EnigmaMachine:
         if plugboard:
             self.plugboard = plugboard
         else:
-            self.plugboard = Plugboard("") # uncabled --> passthrough
+            self.plugboard = Plugboard("")  # uncabled --> passthrough
 
     def __str__(self):
         return "Hello"
@@ -35,12 +35,14 @@ class EnigmaMachine:
             self._rotate()
 
             encoded += self.plugboard(
-                self.fast_rotor(
-                    self.midl_rotor(
-                        self.slow_rotor(
+                self.fast_rotor.forward(
+                    self.midl_rotor.forward(
+                        self.slow_rotor.forward(
                             self.reflector(
-                                self.slow_rotor(
-                                    self.midl_rotor(self.fast_rotor(self.plugboard(c)))
+                                self.slow_rotor.backward(
+                                    self.midl_rotor.backward(
+                                        self.fast_rotor.backward(self.plugboard(c))
+                                    )
                                 )
                             )
                         )
@@ -50,7 +52,31 @@ class EnigmaMachine:
         return encoded
 
     def decode(self, ciphertext):
-        pass
+
+        decoded = ""
+
+        for c in ciphertext:
+
+            self._rotate()
+
+            decoded += self.plugboard(
+                self.fast_rotor.backward(
+                    self.midl_rotor.backward(
+                        self.slow_rotor.backward(
+                            self.reflector(
+                                self.slow_rotor.forward(
+                                    self.midl_rotor.forward(
+                                        self.fast_rotor.forward(
+                                            self.plugboard(c)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        return decoded
 
     def reset(self):
         self.slow_rotor.reset()
