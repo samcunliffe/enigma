@@ -1,23 +1,45 @@
 import warnings
 
 
+
+
 class Plugboard:
-    def __init__(self, list_of_pairs=None, passthrough=True):
+    """A plugboard for a military-grade Enigma machine.
 
-        if passthrough and list_of_pairs:
-            warnings.warn(
-                "Have provided both passthrough=True, and a plugboard configuration. Will ignore the latter."
-            )
+    A simple bidirectional mapping between pairs of characters.
+    """
 
-        if passthrough:
-            self.passthrough = True
-            self.list_of_pairs = None
-        else:
-            self.passthrough = False
-            self.list_of_pairs = list_of_pairs
+    def __init__(self, list_of_pairs=""):
+        self.mapping = self._to_dictionary(list_of_pairs)
+        self.name = list_of_pairs
+
+    def __str__(self):
+        return self.name
 
     def __call__(self, c):
-        if self.passthrough:
-            return c
+        if c in self.mapping.keys():
+            return self.mapping[c]
         else:
-            raise NotImplementedError("Plugboard not implemented yet")
+            return c
+
+    def _to_dictionary(self, list_of_pairs):
+        """Convert to a python dictionary and check the input form"""
+        li = list_of_pairs.split()
+    
+        # can only have a max of 13 cables connecting pairs of 26 letters
+        if len(li) > 13:
+            raise ValueError("Invalid plugboard configuration:", list_of_pairs)
+    
+        # normally only use 10 cables
+        if len(li) > 10:
+            warnings.warn("You have more than 10 cables in the plugboard")
+    
+        # check every pair is really a pair of letters (check unphysical wiring)
+        if any([len(pair) !=2 for pair in li]):
+            raise ValueError("Invalid plugboard configuration:", list_of_pairs)
+    
+        # add reversed list (for the inverse mapping) and create dictonary
+        li += [el[::-1] for el in li]
+        return {key: val for key, val in li}
+    
+    
