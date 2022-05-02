@@ -8,7 +8,7 @@ class EnigmaMachine:
         if plugboard:
             self.plugboard = plugboard
         else:
-            self.plugboard = Plugboard(passthrough=True)
+            self.plugboard = Plugboard("") # uncabled --> passthrough
 
     def __str__(self):
         return "Hello"

@@ -1,23 +1,24 @@
 import warnings
 
 
+def to_dictionary(list_of_pairs):
+    """..."""
+    li = list_of_pairs.split()
+    li += [el[::-1] for el in li]
+    return {key: val for key, val in li}
+
+
 class Plugboard:
-    def __init__(self, list_of_pairs=None, passthrough=True):
+    """A plugboard for a military-grade Enigma machine.
 
-        if passthrough and list_of_pairs:
-            warnings.warn(
-                "Have provided both passthrough=True, and a plugboard configuration. Will ignore the latter."
-            )
+    A simple two-directional mapping between pairs of characters.
+    """
 
-        if passthrough:
-            self.passthrough = True
-            self.list_of_pairs = None
-        else:
-            self.passthrough = False
-            self.list_of_pairs = list_of_pairs
+    def __init__(self, list_of_pairs=""):
+        self.mapping = to_dictionary(list_of_pairs)
 
     def __call__(self, c):
-        if self.passthrough:
-            return c
+        if c in self.mapping.keys():
+            return self.mapping[c]
         else:
-            raise NotImplementedError("Plugboard not implemented yet")
+            return c
