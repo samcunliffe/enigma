@@ -1,5 +1,5 @@
 import string
-from .utils import to_position, verify_alphabet
+from .utils import to_letter, to_position, verify_alphabet
 
 
 class Rotor:
@@ -15,19 +15,9 @@ class Rotor:
         self.n = to_position(notch)
         self.name = name
         self.start = 0
-        self._get_inverse_map()
 
     def __str__(self):
         return self.name if self.name else self.a
-
-    def _get_inverse_map(self):
-        """Given the forward wiring in the "A" position, we need to know the
-        inverse map (also in the "A" position)."""
-
-        # pair up the map with the alphabet ABC..Z
-        list_of_tuples = [(a, b) for a, b in zip(self.a, string.ascii_uppercase)]
-        # now reorder based on the alphebetised map (which scrambles ABC...)
-        self.b = "".join([second for _, second in sorted(list_of_tuples)])
 
     def forward(self, c):
         """Current through the rotor in the forward direction"""
@@ -36,8 +26,8 @@ class Rotor:
 
     def backward(self, c):
         """Current going backwards through the rotor"""
-        point = self.start + to_position(c)
-        return (self.b[point:] + self.b[:point])[0]
+        point = self.start
+        return to_letter((self.a[point:] + self.a[:point]).find(c))
 
     def rotate(self):
         """Rotate the rotor"""

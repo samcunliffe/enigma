@@ -11,18 +11,39 @@ def test_invalid_construction():
 
 
 def test_single_rotor_forward():
-    """Forward call to rotator I"""
+    """Forward call to rotor I"""
     assert components.r1.forward("A") == "E"
     assert components.r1.forward("B") == "K"
     assert components.r1.forward("C") == "M"
     assert components.r1.forward("D") == "F"
 
+
+def test_single_rotor_rotated_backward():
+    """Forward rotated call to rotor I"""
+    components.r1.rotate()
+    assert components.r1.forward("A") == "K"
+    assert components.r1.forward("B") == "M"
+    assert components.r1.forward("C") == "F"
+    assert components.r1.forward("D") == "L"
+    components.r1.reset()
+
+
 def test_single_rotor_backward():
-    """Backward call to rotator I"""
+    """Backward call to rotor I"""
     assert components.r1.backward("E") == "A"
     assert components.r1.backward("K") == "B"
     assert components.r1.backward("M") == "C"
     assert components.r1.backward("F") == "D"
+
+
+def test_single_rotor_rotated_backward():
+    """Backward rotated call to rotor I"""
+    components.r1.rotate()
+    assert components.r1.backward("K") == "A"
+    assert components.r1.backward("M") == "B"
+    assert components.r1.backward("F") == "C"
+    assert components.r1.backward("L") == "D"
+    components.r1.reset()
 
 
 def test_repeated_rotation():
@@ -43,4 +64,4 @@ def test_notch_position():
             assert components.r4.at_notch() == False
         components.r4.rotate()
 
-    
+    components.r4.reset()
