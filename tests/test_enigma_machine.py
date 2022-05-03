@@ -1,14 +1,17 @@
 import unittest
-import enigma.components as _cp
-import enigma.machine as _em
+import enigma.components as components
+from enigma.machine import EnigmaMachine
 
 
 class TestEnigmaMachineNoPlugboard(unittest.TestCase):
-    """Tests of encoding and decoding with three rotors and no plugboard"""
+    """Tests of encoding and decoding with three rotors [ I II III ], the UKW-B
+    reflector and no plugboard"""
 
     def setUp(self):
         """Create the test Enigma machine"""
-        self.enigma = _em.EnigmaMachine(_cp.ukwb, [_cp.r1, _cp.r2, _cp.r3], None)
+        self.enigma = EnigmaMachine(
+            components.ukwb, [components.r1, components.r2, components.r3], None
+        )
 
     def tearDown(self):
         self.enigma.reset()
@@ -16,64 +19,58 @@ class TestEnigmaMachineNoPlugboard(unittest.TestCase):
     def test_rotor_notches_advancement(self):
         """Test that the notches correctly advance neighbouring rotors"""
 
-        for i in range(200):
-
+        for i in range(130):
 
             # First easy check that the fast rotor is working in the machine.
-            self.assertEqual(self.enigma.fast_rotor.start, i % 27)
+            self.assertEqual(self.enigma.fast_rotor.start, i % 26)
 
             # The test machine is set up as [ I II III ] with notches at
             # positions [ Q E V ] which are integer poisitons [ 16 4 21 ]. The
-            # fast rotor at positions 21, 42, (etc) must advance the middle
-            # rotor...
-            #if i < 21:
-            #   self.assertEqual(self.enigma.midl_rotor.start, 0)
-            #if i >= 21 and i < 42:
-            #   self.assertEqual(self.enigma.midl_rotor.start, 1)
-            #if i == 42:
-            #   self.assertEqual(self.enigma.midl_rotor.start, 2)
+            # fast rotor notch should engage when the rotation count goes
+            # 21-->22  (and +26), and advance the middle rotor...
+            if i <= 21:
+                self.assertEqual(self.enigma.midl_rotor.start, 0)
+            if i > 21 and i <= 47:  # (47 = 21 + 26)
+                self.assertEqual(self.enigma.midl_rotor.start, 1)
+            if i == 48:
+                self.assertEqual(self.enigma.midl_rotor.start, 2)
 
-            ## ... likewise when we get to 21*4 = 84, the middle rotor must
-            ## advance the slow rotor
-            # if i < 84:
-            #    self.assertEqual(self.enigma.slow_rotor.start, 0)
-            # if i == 84:
-            #    self.assertEqual(self.enigma.slow_rotor.start, 1)
+            # ... likewise when the middle rotor notch (at 4) engages, the
+            # rotation count should be 125 = 21+(4*26). The middle rotor must
+            # advance the slow rotor
+            if i < 125:
+                self.assertEqual(self.enigma.slow_rotor.start, 0)
+            if i == 126:
+                self.assertEqual(self.enigma.slow_rotor.start, 1)
 
-            if i == 199:
-                self.assertEqual(0, 1)
-
+            # here is the actual rotation call
             self.enigma._rotate()
-            print(i, " ", self.enigma._current_rotation())
 
     def test_never_map_to_self(self):
         """A character can never map to itself"""
-        input_string = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        ciphertext = self.enigma.encode(input_string)
+        ciphertext = self.enigma(
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        )
         self.assertNotIn("A", ciphertext)
 
     def test_reset(self):
         """Encoding the same word twice should produce the same ciphertext"""
-        first = self.enigma.encode("TURING")
-        self.assertEqual(first, self.enigma.encode("TURING"))
+        first = self.enigma("TURING")
+        self.assertEqual(first, self.enigma("TURING"))
 
-        first = self.enigma.encode("WETTERBERICHT")
-        self.assertEqual(first, self.enigma.encode("WETTERBERICHT"))
+        first = self.enigma("WETTERBERICHT")
+        self.assertEqual(first, self.enigma("WETTERBERICHT"))
 
     def test_in_out_character(self):
         """Check we can encode and decode one character"""
-        self.assertEqual(self.enigma.encode(self.enigma.encode("A")), "A")
-        self.assertEqual(self.enigma.encode(self.enigma.encode("B")), "B")
+        self.assertEqual(self.enigma(self.enigma("A")), "A")
+        self.assertEqual(self.enigma(self.enigma("B")), "B")
 
-    @unittest.skip
     def test_in_out_word(self):
         """Check we can encode and decode a word"""
-        self.assertEqual(self.enigma.encode(self.enigma.encode("TURING")), "TURING")
-        self.assertEqual(
-            self.enigma.encode(self.enigma.encode("WETTERBERICHT")), "WETTERBERICHT"
-        )
+        self.assertEqual(self.enigma(self.enigma("TURING")), "TURING")
+        self.assertEqual(self.enigma(self.enigma("WETTERBERICHT")), "WETTERBERICHT")
 
-    @unittest.skip
     def test_in_out_long_message(self):
         """Check we can encode and decode a rather long message"""
 
@@ -96,11 +93,8 @@ class TestEnigmaMachineNoPlugboard(unittest.TestCase):
         # need to convert to upper and remove all spaces, punctiuation etc.
         long_message = "".join(filter(str.isalpha, long_message)).upper()
 
-        self.assertEqual(
-            long_message, self.enigma.encode(self.enigma.encode(long_message))
-        )
+        self.assertEqual(long_message, self.enigma(self.enigma(long_message)))
 
 
 if __name__ == "__main__":
     unittest.main()
-
