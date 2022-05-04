@@ -9,6 +9,6 @@ setup(
     description='Sams enigma machine',
     url='https://github.com/samcunliffe/enigma',
     author='Sam Cunliffe',
-    license='MIT 2-clause',
+    license='MIT',
     packages=['enigma'],
 )
