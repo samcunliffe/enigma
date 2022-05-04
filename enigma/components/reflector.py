@@ -20,5 +20,4 @@ class Reflector:
         self.a = array
 
     def __call__(self, c):
-        print("Reflector:\t\t", c, " --> ", self.a[to_position(c)])
         return self.a[to_position(c)]

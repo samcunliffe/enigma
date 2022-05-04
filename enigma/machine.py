@@ -1,5 +1,5 @@
 from .components import Plugboard
-from .components.utils import to_letter
+from .components.utils import to_letter, to_position
 
 
 class EnigmaMachine:
@@ -18,9 +18,14 @@ class EnigmaMachine:
         plugboard (enigma.components.Plugboard): optional plugboard wiring
     """
 
-    def __init__(self, reflector, rotors, plugboard):
+    def __init__(self, reflector, rotors, starting="AAA", plugboard=None):
         self.reflector = reflector
         self.slow_rotor, self.midl_rotor, self.fast_rotor = rotors
+
+        self.slow_rotor.start = to_position(starting[0])
+        self.midl_rotor.start = to_position(starting[1])
+        self.fast_rotor.start = to_position(starting[2])
+
         if plugboard:
             self.plugboard = plugboard
         else:
@@ -54,15 +59,32 @@ class EnigmaMachine:
     def _current_rotation(self):
         """A printable string representation of the current rotation"""
         return (
-            str(self.slow_rotor.start)
+            str(self.slow_rotor.current_position)
             + " "
-            + str(self.midl_rotor.start)
+            + str(self.midl_rotor.current_position)
             + " "
-            + str(self.fast_rotor.start)
+            + str(self.fast_rotor.current_position)
         )
 
     def __call__(self, message):
-        """Encipher or decipher the ``message``"""
+        return self.encipher(message)
+
+    def encipher(self, message):
+        """Encipher or decipher the ``message``.
+        Can also perform this action by calling the EnigmaMachine instance
+
+        Examples:
+            >> my_engima("SECRETMESSAGE")
+            >> my_enigma.encipher("SECRETMESSAGE")
+
+        Parameters:
+            message (str): the message to encipher/decipher must be
+                       entirely capitals with no punctuation or numbers etc.
+
+        Returns:
+            str: the enciphered or deciphered message
+
+        """
         self.reset()
         output = ""
 
@@ -71,14 +93,14 @@ class EnigmaMachine:
             #
             # method calls inner to outer:
             #
-            #   ╭───────╮    ╭──┬──┬──╮    ╭───────╮          
-            #   │       │    │  │  │  │    │       │             
+            #   ╭───────╮    ╭──┬──┬──╮    ╭───────╮
+            #   │       │    │  │  │  │    │       │
             #   │ ┌─────│ <- │──│──│──│ <- │───────│ <-- keypress
-            #   │ │     │    │  │  │  │    │       │        
+            #   │ │     │    │  │  │  │    │       │
             #   │ └─────│ -> │──│──│──│ -> │───────│ --> light
             #   │       │    │  │  │  │    │       │
-            #   ╰───────╯    ╰──┴──┴──╯    ╰───────╯          
-            #   reflector    rotors *3     plugboard              
+            #   ╰───────╯    ╰──┴──┴──╯    ╰───────╯
+            #   reflector    rotors *3     plugboard
             #
             output += self.plugboard(
                 self.fast_rotor.backward(
@@ -104,3 +126,9 @@ class EnigmaMachine:
         self.slow_rotor.reset()
         self.midl_rotor.reset()
         self.fast_rotor.reset()
+
+    def clear(self):
+        """Reset all of the rotors to their "A" positions and forget the offsets"""
+        self.slow_rotor.clear()
+        self.midl_rotor.clear()
+        self.fast_rotor.clear()
