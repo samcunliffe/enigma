@@ -65,3 +65,12 @@ def test_notch_position():
         components.r4.rotate()
 
     components.r4.reset()
+
+def test_starting():
+    """Check the starting position"""
+    components.r1.set_starting("D")
+    assert components.r1.forward("A") == "F"
+    assert components.r1.forward("B") == "L"
+    assert components.r1.forward("C") == "G"
+    assert components.r1.forward("D") == "D"
+    components.r1.clear()

@@ -27,6 +27,11 @@ class Rotor:
     def __str__(self):
         return self.name if self.name else self.a
 
+    def set_starting(self, starting):
+        """Set the starting position of the rotor if not set at construction"""
+        self.start = to_position(starting)
+        self.reset()
+
     def forward(self, c):
         """Current through the rotor in the forward direction"""
         return (self.a[self.current_position :] + self.a[: self.current_position])[

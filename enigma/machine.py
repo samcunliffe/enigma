@@ -22,9 +22,9 @@ class EnigmaMachine:
         self.reflector = reflector
         self.slow_rotor, self.midl_rotor, self.fast_rotor = rotors
 
-        self.slow_rotor.start = to_position(starting[0])
-        self.midl_rotor.start = to_position(starting[1])
-        self.fast_rotor.start = to_position(starting[2])
+        self.slow_rotor.set_starting(starting[0])
+        self.midl_rotor.set_starting(starting[1])
+        self.fast_rotor.set_starting(starting[2])
 
         if plugboard:
             self.plugboard = plugboard
