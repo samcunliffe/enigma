@@ -4,6 +4,7 @@ enigma
 Sam's Enigma machine simulator.
 
 [![Python](https://github.com/samcunliffe/enigma/actions/workflows/pythonapp.yml/badge.svg)](https://github.com/samcunliffe/enigma/actions/workflows/pythonapp.yml)
+[![codecov](https://codecov.io/gh/samcunliffe/enigma/branch/main/graph/badge.svg?token=IVW9Y284VG)](https://codecov.io/gh/samcunliffe/enigma)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/samcunliffe/enigma/blob/main/LICENSE)
 
 Getting started
