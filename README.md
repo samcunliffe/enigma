@@ -7,6 +7,17 @@ Sam's Enigma machine simulator.
 [![codecov](https://codecov.io/gh/samcunliffe/enigma/branch/main/graph/badge.svg?token=IVW9Y284VG)](https://codecov.io/gh/samcunliffe/enigma)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/samcunliffe/enigma/blob/main/LICENSE)
 
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg/440px-Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg)
+
+<small>
+    <small>
+        Enigma machine. Museo della Scienza e della Tecnologia "Leonardo da Vinci", [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0), via Wikimedia Commons
+    </small>
+</small>
+<br/>
+
+
 Getting started
 ---------------
 
