@@ -10,12 +10,7 @@ Sam's Enigma machine simulator.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg/440px-Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg)
 
-<small>
-    <small>
-        Enigma machine. Museo della Scienza e della Tecnologia "Leonardo da Vinci", [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0), via Wikimedia Commons
-    </small>
-</small>
-<br/>
+Enigma machine. [Museo Nazionale Scienza e Tecnologia Leonardo da Vinci](https://www.museoscienza.org/), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0), via Wikimedia Commons
 
 
 Getting started
